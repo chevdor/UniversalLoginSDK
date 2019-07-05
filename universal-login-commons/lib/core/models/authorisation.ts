@@ -1,4 +1,4 @@
-export interface AddAuthorisationRequest {
+export interface CancelAuthorisationRequest {
   walletContractAddress: string;
   publicKey: string;
 }

@@ -1,16 +1,21 @@
 import {utils} from 'ethers';
 
-import {AddAuthorisationRequest} from '../models/authorisation';
+import {CancelAuthorisationRequest} from '../models/authorisation';
 
-export const signAddAuthorisationRequest =
-  (addAuthorisationRequest: AddAuthorisationRequest, signingKey: utils.SigningKey): [string, utils.Signature] => {
-    const payloadString = JSON.stringify(addAuthorisationRequest);
+export const hashCancelAuthorisationRequest =
+  (cancelAuthorisationRequest: CancelAuthorisationRequest): string => {
+    const payloadString = JSON.stringify(cancelAuthorisationRequest);
     const payloadBytes = utils.toUtf8Bytes(payloadString);
-    const payloadDigest = utils.keccak256(payloadBytes);
-    return [payloadDigest, signingKey.signDigest(payloadDigest)];
+    return utils.keccak256(payloadBytes);
   };
 
-export const verifyAddAuthroisationRequest =
+export const signCancelAuthorisationRequest =
+  (cancelAuthorisationRequest: CancelAuthorisationRequest, signingKey: utils.SigningKey): utils.Signature => {
+    const payloadDigest = hashCancelAuthorisationRequest(cancelAuthorisationRequest);
+    return signingKey.signDigest(payloadDigest);
+  };
+
+export const verifyCancelAuthroisationRequest =
   (payloadDigest: string, signature: utils.Signature, address: string): boolean => {
     const computedAddress = utils.recoverAddress(payloadDigest, signature);
     return computedAddress === address;
