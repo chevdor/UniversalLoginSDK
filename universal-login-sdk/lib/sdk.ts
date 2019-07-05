@@ -223,9 +223,18 @@ class UniversalLoginSDK {
   }
 
   async denyRequest(walletContractAddress: string, key: string) {
-    await this.relayerApi.denyConnection(walletContractAddress, key);
+    console.log('in sdk deny request')
+    const result = await this.relayerApi.denyConnection(walletContractAddress, key);
+    console.log('in sdk deny request result', result);
     return key;
   }
+
+   // async denyRequest(walletContractAddress: string, publicKey: string) {
+  //   return await this.relayerApi.denyConnection(
+  //     signCancelAutorisation(
+  //       new CancelAutorisation({walletContractAddress, publicKey})
+  //     ));
+  // }
 
   async fetchPendingAuthorisations(walletContractAddress: string) {
     return this.relayerObserver.fetchPendingAuthorisations(walletContractAddress);

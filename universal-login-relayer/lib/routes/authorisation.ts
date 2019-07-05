@@ -18,7 +18,9 @@ const getPending = (authorisationService : AuthorisationService) =>
 
 const denyRequest = (authorisationService : AuthorisationService) =>
   async (data: {walletContractAddress: string, body: {key: string}}) => {
+    console.log('before denyRequest');
     const result = await authorisationService.removeRequest(data.walletContractAddress, data.body.key);
+    console.log('result form denyRequest', result);
     return responseOf(result, 204);
   };
 

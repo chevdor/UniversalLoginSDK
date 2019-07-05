@@ -40,10 +40,13 @@ export class RelayerApi {
   }
 
   async denyConnection(walletContractAddress: string, key: string) {
-    return this.http('POST', `/authorisation/${walletContractAddress}`, {
+    console.log('in relayerapi result');
+    const result = this.http('POST', `/authorisation/${walletContractAddress}`, {
       walletContractAddress,
       key,
     });
+    console.log('in relayerapi result', result);
+    return result;
   }
 
   async getPendingAuthorisations(walletContractAddress: string) {
