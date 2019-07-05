@@ -1,5 +1,5 @@
 import {expect} from 'chai';
-import {Wallet, utils} from 'ethers';
+import {utils} from 'ethers';
 import {AddAuthorisationRequest} from '../../../lib/core/models/authorisation';
 import {signAddAuthorisationRequest, verifyAddAuthroisationRequest} from '../../../lib/core/utils/authorisation';
 
