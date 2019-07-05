@@ -1,6 +1,8 @@
 export interface CancelAuthorisationRequest {
   walletContractAddress: string;
-  publicKey: string;
+  body: {
+    key: string
+  };
 }
 
 // TODO CancelAuthorisationRequest

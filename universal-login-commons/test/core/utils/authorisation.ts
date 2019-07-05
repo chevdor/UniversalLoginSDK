@@ -9,26 +9,30 @@ describe('authorization sign verify', async () => {
   const address = '0xa67131F4640294a209fdFF9Ad15a409D22EEB3Dd';
   const signingKey = new utils.SigningKey(privateKey);
   const correctSignature: utils.Signature = {
-    recoveryParam: 1,
-    r: '0x88ef1df66d5755b4a936be18f3a6cd0aa36ffcb2066f12347f6c70bdee96bc28',
-    s: '0x0014a8df6af34622c8df595a37dd7b1d6bb5124e6563ad8ecfdb7250cdbdc6e3',
-    v: 28
+    recoveryParam: 0,
+    r: '0xdd1c5bb451c189ec5ccffd371337c454c69d2be961f319ac3c836ea9d314a4c4',
+    s: '0x37788faa6e8962205f1ab26a71c78eb64de72e9d34e9a764c437da9021e281e0',
+    v: 27
   };
-  const correctPayloadDigest = '0x01d663350574ac759a78f02cd4c0221e71382136bb96c4bc58ea182842e92a0e';
+  const correctPayloadDigest = '0x8d960282a020a83c5b5006719b18f72ffab4ef7a4b2356aa623652da1b2e42e1';
 
   it('Hash cancel authorisation request', async () => {
     const cancelAuthorisationRequest: CancelAuthorisationRequest = {
       walletContractAddress: contractAddress,
-      publicKey: address.toLowerCase()
+      body: {
+        key: address.toLowerCase()
+      }
     };
     const payloadDigest = hashCancelAuthorisationRequest(cancelAuthorisationRequest);
-    expect(payloadDigest).to.deep.equal(correctPayloadDigest);
+    expect(payloadDigest).to.equal(correctPayloadDigest);
   });
 
   it('Sign cancel authorisation request payload', async () => {
     const cancelAuthorisationRequest: CancelAuthorisationRequest = {
       walletContractAddress: contractAddress,
-      publicKey: address.toLowerCase()
+      body: {
+        key: address.toLowerCase()
+      }
     };
     const signature = signCancelAuthorisationRequest(cancelAuthorisationRequest, signingKey);
     expect(signature).to.deep.equal(correctSignature);
@@ -45,7 +49,9 @@ describe('authorization sign verify', async () => {
 
     const cancelAuthorisationRequest: CancelAuthorisationRequest = {
       walletContractAddress: contractAddress,
-      publicKey: address.toLowerCase()
+      body: {
+        key: address.toLowerCase()
+      }
     };
 
     const forgedSignature = signCancelAuthorisationRequest(cancelAuthorisationRequest, attackerSigningKey);
