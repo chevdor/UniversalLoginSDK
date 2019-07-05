@@ -32,3 +32,5 @@ export {getEnv} from './core/utils/getEnv';
 export {classesForElement} from './react/classesForElement';
 export {getSuggestionId} from './react/getSuggestionId';
 export {copy} from './react/copy';
+export {AddAuthorisationRequest} from './core/models/authorisation';
+export {signAddAuthorisationRequest, verifyAddAuthroisationRequest} from './core/utils/authorisation';
