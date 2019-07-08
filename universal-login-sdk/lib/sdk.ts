@@ -11,6 +11,7 @@ import {retry} from './utils/retry';
 import {BlockchainService} from './services/BlockchainService';
 import {MissingConfiguration} from './utils/errors';
 import {FutureWalletFactory} from './services/FutureWalletFactory';
+import {CancelAuthorisationRequest, signCancelAuthorisationRequest} from '@universal-login/commons';
 
 class UniversalLoginSDK {
   provider: providers.Provider;
@@ -222,19 +223,18 @@ class UniversalLoginSDK {
     return privateKey;
   }
 
-  async denyRequest(walletContractAddress: string, key: string) {
-    console.log('in sdk deny request')
-    const result = await this.relayerApi.denyConnection(walletContractAddress, key);
-    console.log('in sdk deny request result', result);
-    return key;
+  async denyRequest(walletContractAddress: string, publicKey: string, privateKey: string) {
+    const cancelAuthorisationRequest: CancelAuthorisationRequest = {
+      walletContractAddress,
+      key: publicKey
+    };
+    await this.relayerApi.denyConnection(
+      walletContractAddress,
+      publicKey,
+      signCancelAuthorisationRequest(cancelAuthorisationRequest, privateKey)
+    );
+    return publicKey;
   }
-
-   // async denyRequest(walletContractAddress: string, publicKey: string) {
-  //   return await this.relayerApi.denyConnection(
-  //     signCancelAutorisation(
-  //       new CancelAutorisation({walletContractAddress, publicKey})
-  //     ));
-  // }
 
   async fetchPendingAuthorisations(walletContractAddress: string) {
     return this.relayerObserver.fetchPendingAuthorisations(walletContractAddress);

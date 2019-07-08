@@ -34,8 +34,9 @@ describe('authorization sign verify', async () => {
   });
 
   it('Verify cancel authorisation request payload', async () => {
-    const result = verifyCancelAuthroisationRequest(correctPayloadDigest, correctSignature, address);
+    const [result, computedAddress] = verifyCancelAuthroisationRequest(correctPayloadDigest, correctSignature, address);
     expect(result).to.deep.equal(true);
+    expect(computedAddress).to.deep.equal(address);
   });
 
   it('Forged signature', async () => {

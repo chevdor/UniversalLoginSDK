@@ -17,19 +17,29 @@ describe('E2E authorization - sdk <=> relayer', async () => {
   let walletContract: any;
 
   beforeEach(async () => {
-    ({provider, sdk, privateKey, contractAddress, walletContract, relayer} = await loadFixture(basicSDK));  });
+    ({provider, sdk, privateKey, contractAddress, walletContract, relayer} = await loadFixture(basicSDK));
+
+  });
 
   afterEach(async () => {
     await relayer.clearDatabase();
   });
 
-  it('Send unsigned request', async () => {
+  it('Send valid cancel request', async () => {
     const userAddress = utils.computeAddress(privateKey);
-    await expect(sdk.denyRequest(contractAddress, userAddress)).to.be.eventually.rejected;
+    await expect(sdk.denyRequest(contractAddress, userAddress, privateKey)).to.be.eventually.fulfilled;
   });
 
-  it('Sign authorisation request payload', async () => {
-    // await expect(sdk.relayerApi (contractAddress)).to.be.eventually.rejected;
+  it('Send forged cancel request with valid signature', async () => {
+    const attackerPrivateKey = Wallet.createRandom().privateKey;
+    const attackerAddress = utils.computeAddress(attackerPrivateKey);
+    await expect(sdk.denyRequest(contractAddress, attackerAddress, attackerPrivateKey)).to.be.eventually.rejected;
+  });
+
+  it('Send cancel request with invalid signature', async () => {
+    const userAddress = utils.computeAddress(privateKey);
+    const attackerPrivateKey = Wallet.createRandom().privateKey;
+    await expect(sdk.denyRequest(contractAddress, userAddress, attackerPrivateKey)).to.be.eventually.rejected;
   });
 
   after(async () => {
