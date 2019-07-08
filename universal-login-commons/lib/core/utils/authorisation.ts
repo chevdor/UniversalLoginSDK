@@ -10,8 +10,9 @@ export const hashCancelAuthorisationRequest =
   };
 
 export const signCancelAuthorisationRequest =
-  (cancelAuthorisationRequest: CancelAuthorisationRequest, signingKey: utils.SigningKey): utils.Signature => {
+  (cancelAuthorisationRequest: CancelAuthorisationRequest, privateKey: string): utils.Signature => {
     const payloadDigest = hashCancelAuthorisationRequest(cancelAuthorisationRequest);
+    const signingKey = new utils.SigningKey(privateKey);
     return signingKey.signDigest(payloadDigest);
   };
 
